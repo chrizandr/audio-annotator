@@ -199,7 +199,7 @@ Annotator.prototype = {
     // Update the interface with the next task's data
     loadNextTask: function() {
         var my = this;
-        $.getJSON(dataUrl)
+        $.getJSON("/api/")
         .done(function(data) {
             my.currentTask = data.task;
             my.update();
@@ -239,6 +239,7 @@ Annotator.prototype = {
                     my.post(content);
                 }, 2000);
             } else {
+                console.log(JSON.stringify(content))
                 this.post(content);
             }
         }
@@ -249,7 +250,7 @@ Annotator.prototype = {
         var my = this;
         $.ajax({
             type: 'POST',
-            url: $.getJSON(postUrl),
+            url: "/api/",
             contentType: 'application/json',
             data: JSON.stringify(content)
         })
