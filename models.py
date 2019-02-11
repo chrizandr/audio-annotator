@@ -36,6 +36,7 @@ class Sentences(Base):
     id_ = Column(Integer, primary_key=True)
     audio_id = Column(Integer, ForeignKey("audio.id_"), unique=False)
     content = Column(String(convert_unicode=True))
+    audio_file = Column(String)
 
     def __init__(self, audio_id, content):
         """Create new instance."""

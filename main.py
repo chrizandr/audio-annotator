@@ -1,22 +1,23 @@
-"""Main application code."""
+"""Server code."""
 from flask import Flask
 from flask import request
 from flask import session
-from flask import render_template, url_for, redirect
+from flask import render_template, url_for, redirect, abort
 from flask import jsonify
 
 import pdb
+import sys
+
+from sqlalchemy import create_engine
+from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.orm import scoped_session
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy import create_engine, exists
-from sqlalchemy.orm.exc import NoResultFound
-import sys
 
 # from gevent.pywsgi import WSGIServer
 
+from models import Audio, Sentences, Annotations
 from settings import DB_URL
 from settings import Key
-# from models import Songs, GenreProf, Personality
 
 print("Setting up app...")
 app = Flask(__name__)
@@ -36,24 +37,29 @@ def index():
 def admin():
     """Admin Index Page."""
     if request.method == "GET":
-        response = get_next_file()
-        return jsonify(response)
+        ret, response = get_next_file()
+        if ret:
+            return jsonify(response)
+        else:
+            abort(404)
     if request.method == "POST":
         pdb.set_trace()
         ret = process_annotation(request.data)
         if ret:
+            print(request.data)
             next_song = get_next_file()
-        return jsonify(response)
+        return jsonify(next_song)
 
 
 def get_next_file():
     """Get the next un-annotated file for annotation."""
     response = {
         "task": {
+            "taskid": "22",
             "feedback": "none",
             "visualization": "spectrogram",
-            "annotationTag": [],    # Add annotation sentences here
-            "url": "/static/wav/spectrogram_demo_doorknock_mono.wav",   # URL for the audio file
+            "annotationTag": ["Test", "test"],    # Add annotation sentences here
+            "url": "/static/wav/paris.wav",   # URL for the audio file
             "proximityTag": [],
             "alwaysShowTags": "True",
             "instructions": [
@@ -66,8 +72,26 @@ def get_next_file():
             ]
         }
     }
-    return response
+    return True, response
+    try:
+        not_annotated = session.query(Audio).filter(Audio.annotated == "False").one()
+        audio_path = not_annotated.audio_file
+    except NoResultFound:
+        return False, None
 
+    sentences = session.query(Sentences).filter(Sentences.audio_id == not_annotated.id_)
+    if len(sentences) == 0:
+        return False, None
+
+    annotatation_tags = [x.content for x in sentences]
+    response["taskid"] = not_annotated.id_
+    response["url"] += audio_path
+    response["annotationTag"] = annotatation_tags
+
+
+def process_annotation(data):
+    """Process the annotation data."""
+    pass
 
 if __name__ == "__main__":
     if len(sys.argv) <= 1:
