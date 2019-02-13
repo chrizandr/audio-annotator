@@ -116,7 +116,6 @@ def process_annotation(data):
     return True
 
 
-
 if __name__ == "__main__":
     if len(sys.argv) <= 1:
         print("Usage:\n\tpython app.py [host address] [port]\n")

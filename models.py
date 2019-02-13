@@ -17,11 +17,13 @@ class Audio(Base):
     __tablename__ = "audio"
 
     id_ = Column(Integer, primary_key=True)
+    audio_file = Column(String, unique=True)
     annotated = Column(String)
 
-    def __init__(self):
+    def __init__(self, audio_file):
         """Create admin."""
         self.annotated = "False"
+        self.audio_file = audio_file
 
     def __repr__(self):
         """Verbose object name."""
@@ -36,7 +38,6 @@ class Sentences(Base):
     id_ = Column(Integer, primary_key=True)
     audio_id = Column(Integer, ForeignKey("audio.id_"), unique=False)
     content = Column(String(convert_unicode=True))
-    audio_file = Column(String)
 
     def __init__(self, audio_id, content):
         """Create new instance."""
