@@ -1,7 +1,6 @@
 """Server code."""
 from flask import Flask
 from flask import request
-from flask import session
 from flask import render_template, url_for, redirect, abort
 from flask import jsonify
 
@@ -22,7 +21,7 @@ from settings import Key
 print("Setting up app...")
 app = Flask(__name__)
 app.secret_key = Key
-print("Creating database link and session...")
+print("Creating database link and db_session...")
 engine = create_engine(DB_URL)
 db_session = scoped_session(sessionmaker(bind=engine))
 
@@ -43,12 +42,12 @@ def admin():
         else:
             abort(404)
     if request.method == "POST":
-        pdb.set_trace()
-        ret = process_annotation(request.data)
+        ret = process_annotation(request.get_json())
         if ret:
-            print(request.data)
             next_song = get_next_file()
-        return jsonify(next_song)
+            return jsonify(next_song)
+        else:
+            abort(405)
 
 
 def get_next_file():
@@ -74,12 +73,12 @@ def get_next_file():
     }
     return True, response
     try:
-        not_annotated = session.query(Audio).filter(Audio.annotated == "False").one()
+        not_annotated = db_session.query(Audio).filter(Audio.annotated == "False").one()
         audio_path = not_annotated.audio_file
     except NoResultFound:
         return False, None
 
-    sentences = session.query(Sentences).filter(Sentences.audio_id == not_annotated.id_)
+    sentences = db_session.query(Sentences).filter(Sentences.audio_id == not_annotated.id_)
     if len(sentences) == 0:
         return False, None
 
@@ -91,7 +90,32 @@ def get_next_file():
 
 def process_annotation(data):
     """Process the annotation data."""
-    pass
+    try:
+        task_id = data["task_id"]
+        annotations = data["annotations"]
+    except KeyError:
+        return False
+
+    try:
+        audio = db_session.query(Audio).filter(Audio.id_ == task_id).one()
+        assert audio.annotated == "False"
+        sentences = db_session.query(Sentences).filter(Sentences.audio_id == task_id)
+        assert len(sentences) == len(annotations)
+    except (AssertionError, NoResultFound):
+        return False
+
+    for annotation in annotations:
+        ann = Annotations(task_id, annotation["annotation"],
+                          annotation["start"], annotation["end"])
+        db_session.add(ann)
+
+    audio.annotated = True
+    db_session.commit()
+    print("Jai Mishra")
+
+    return True
+
+
 
 if __name__ == "__main__":
     if len(sys.argv) <= 1:
