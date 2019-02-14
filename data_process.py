@@ -66,8 +66,8 @@ def add_in_db(audio, sentences, session):
 
 
 if __name__ == "__main__":
-    text_path = "/home/chris_andrew/txt.done.data"
-    prefix = "/home/chris_andrew/audio-annotator/static/wav/Telugu/"
+    text_path = "/home/chrizandr/Downloads/Telugu/txt.done.data"
+    prefix = "/home/chrizandr/audio-annotator/static/wav/Telugu/"
 
     fnames, texts = process_data(text_path, prefix)
     add_to_db(fnames, texts)
