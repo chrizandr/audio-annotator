@@ -110,9 +110,8 @@ def process_annotation(data):
                           annotation["start"], annotation["end"])
         db_session.add(ann)
 
-    audio.annotated = True
+    audio.annotated = "True"
     db_session.commit()
-    print("Jai Mishra")
 
     return True
 
