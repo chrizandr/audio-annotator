@@ -62,7 +62,7 @@ def get_next_file():
             "proximityTag": [],
             "alwaysShowTags": "True",
             "instructions": [
-                "Highlight &amp; Label the files with sentences.",
+                "Highlight &amp; Label the files with phrases.",
                 "1. &nbsp; Click the play button and listen to the recording.",
                 "2. &nbsp; For each phrase that you hear click and drag on the visualization to create a new annotation.",
                 "3. &nbsp; When creating a new annotation be as precise as possible.",
