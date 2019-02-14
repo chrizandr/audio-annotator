@@ -55,4 +55,4 @@ This will communicate with the `/api` path for audio files and annotations
 
   Alternatively, you can also run a multi-threaded server for multiple requests using gunicorn: `gunicorn --workers 10 --timeout 60 --bind 0.0.0.0:8088 main:app`
 
-  Annotator should be running on `http://localhost:8080`
+  Annotator should be running on http://localhost:8080
