@@ -71,21 +71,22 @@ def get_next_file():
             ]
         }
     }
-    return True, response
     try:
-        not_annotated = db_session.query(Audio).filter(Audio.annotated == "False").one()
+        not_annotated = db_session.query(Audio).filter(Audio.annotated == "False").first()
         audio_path = not_annotated.audio_file
     except NoResultFound:
         return False, None
 
-    sentences = db_session.query(Sentences).filter(Sentences.audio_id == not_annotated.id_)
+    sentences = db_session.query(Sentences).filter(Sentences.audio_id == not_annotated.id_).all()
     if len(sentences) == 0:
         return False, None
 
     annotatation_tags = [x.content for x in sentences]
-    response["taskid"] = not_annotated.id_
-    response["url"] += audio_path
-    response["annotationTag"] = annotatation_tags
+    response["task"]["taskid"] = not_annotated.id_
+    response["task"]["url"] = audio_path
+    response["task"]["annotationTag"] = annotatation_tags
+    # pdb.set_trace()
+    return True, response
 
 
 def process_annotation(data):
@@ -95,11 +96,11 @@ def process_annotation(data):
         annotations = data["annotations"]
     except KeyError:
         return False
-
+    # pdb.set_trace()
     try:
         audio = db_session.query(Audio).filter(Audio.id_ == task_id).one()
         assert audio.annotated == "False"
-        sentences = db_session.query(Sentences).filter(Sentences.audio_id == task_id)
+        sentences = db_session.query(Sentences).filter(Sentences.audio_id == task_id).all()
         assert len(sentences) == len(annotations)
     except (AssertionError, NoResultFound):
         return False
