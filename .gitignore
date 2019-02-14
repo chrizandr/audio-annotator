@@ -8,3 +8,7 @@ venv
 
 *.db
 *.wav
+
+
+__pycache__/*
+*.pyc

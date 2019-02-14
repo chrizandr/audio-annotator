@@ -6,6 +6,7 @@ import wave
 from models import get_debug_session, Audio, Sentences
 from settings import DB_URL
 
+import pdb
 
 def process_data(filename, prefix):
     """Process the data before adding to db."""
@@ -15,7 +16,7 @@ def process_data(filename, prefix):
     for line in f:
         data = line.split('"')
         fname = data[0].strip('(').strip()
-        os.path.join(prefix, fname)
+        fname = os.path.join(prefix, fname) + ".wav"
         text = data[1].strip()
         fnames.append(fname)
         texts.append(text)
@@ -35,19 +36,21 @@ def add_to_db(fnames, texts):
         count += 1
 
         t = text.split()
+        num_words = len(t)
         sentences = []
         with contextlib.closing(wave.open(fname, 'r')) as f:
             frames = f.getnframes()
             rate = f.getframerate()
             duration = frames / float(rate)
             if duration > mean_len:
-                splits = (duration // mean_len) + 1
-                for i in range(splits):
-                    start = int(i * mean_len)
-                    end = int((i+1) * mean_len)
-                    sentences.append(t[start: end])
-
-        add_in_db(fname, sentences, session)
+                num_parts = int(duration // mean_len) + 1
+                part_len = num_words // (num_parts - 1)
+                for i in range(num_parts):
+                    start = int(i * part_len)
+                    end = int((i+1) * part_len)
+                    sentences.append(" ".join(t[start: end]))
+                pdb.set_trace()
+                add_in_db(fname, sentences, session)
 
 
 def add_in_db(audio, sentences, session):
@@ -62,10 +65,8 @@ def add_in_db(audio, sentences, session):
 
 
 if __name__ == "__main__":
-    text_path = "/home/chris/tel_f_tts/txt.done.data"
-    prefix = "/home/chris/audio-annotator/static/wav/Telugu/"
-    train_file = "filelists/ljs_audio_text_train_filelist.txt"
-    val_file = "filelists/ljs_audio_text_val_filelist.txt"
+    text_path = "/home/chrizandr/Downloads/Telugu/txt.done.data"
+    prefix = "/home/chrizandr/audio-annotator/static/wav/Telugu/"
 
     fnames, texts = process_data(text_path, prefix)
     add_to_db(fnames, texts)

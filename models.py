@@ -5,6 +5,9 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, Float
 from sqlalchemy.orm import sessionmaker
 
+import pdb
+
+
 Base = declarative_base()
 
 
@@ -91,5 +94,6 @@ def setup(DB_URL):
 
 
 if __name__ == "__main__":
-    session = setup(DB_URL)
-    # session = get_debug_session(DB_URL)
+    # session = setup(DB_URL)
+    session = get_debug_session(DB_URL)
+    pdb.set_trace()
