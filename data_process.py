@@ -33,7 +33,6 @@ def add_to_db(fnames, texts):
     count = 0
     for fname, text in zip(fnames, texts):
         print("Processing ", (100.0 * count)/total, "%")
-        count += 1
 
         t = text.split()
         num_words = len(t)
@@ -49,8 +48,10 @@ def add_to_db(fnames, texts):
                     start = int(i * part_len)
                     end = int((i+1) * part_len)
                     sentences.append(" ".join(t[start: end]))
-                pdb.set_trace()
+
+                count += 1
                 add_in_db(fname, sentences, session)
+        print("Processes files: ", count)
 
 
 def add_in_db(audio, sentences, session):
@@ -65,8 +66,8 @@ def add_in_db(audio, sentences, session):
 
 
 if __name__ == "__main__":
-    text_path = "/home/chrizandr/Downloads/Telugu/txt.done.data"
-    prefix = "/home/chrizandr/audio-annotator/static/wav/Telugu/"
+    text_path = "/home/chris_andrew/txt.done.data"
+    prefix = "/home/chris_andrew/audio-annotator/static/wav/Telugu/"
 
     fnames, texts = process_data(text_path, prefix)
     add_to_db(fnames, texts)
