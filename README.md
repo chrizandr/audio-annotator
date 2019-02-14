@@ -47,4 +47,6 @@ This will communicate with the `/api` path for audio files and annotations
 
 - Run the server: `python main.py 0.0.0.0 8080`
 
+  Alternatively, you can also run a multi-threaded server for multiple requests using gunicorn: `gunicorn --workers 10 --timeout 60 --bind 0.0.0.0:8088 main:app`
+
   Annotator should be running on `http://localhost:8080`
