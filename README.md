@@ -30,11 +30,17 @@ This will communicate with the `/api` path for audio files and annotations
 
 - Add all data into a file in the following format:
   ```
+  ...
   audio1.mp3|This is the text that is spoken in audio1.mp3
   audio2.mp3|This is the text that is spoken in audio2.mp3
+  audio3.mp3|This is the text that is spoken in audio3.mp3
   ....
   ```
-  add the path to this file into `text_path` variable in `settings.py`
+  NOTE: Only copy the name of the audio file, not the entire path. Each entry in new line. Don't include any other info in this file.
+
+  Add the path of this file into `text_path` variable in `settings.py`
+
+- Copy all the audio files into `static/wav/[Dataset]/`, where `[Dataset]` is a name for the specific dataset. [You will have to create an appropriate folder]. Update the path in `settings.py` on the `prefix` variable.
 
 - Prepare the database and split the audio text into correct size phrases:
 

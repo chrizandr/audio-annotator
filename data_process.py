@@ -4,7 +4,7 @@ import os
 import wave
 
 from models import get_debug_session, Audio, Sentences
-from settings import DB_URL, text_path
+from settings import DB_URL, text_path, prefix
 
 import pdb
 
@@ -66,7 +66,5 @@ def add_in_db(audio, sentences, session):
 
 
 if __name__ == "__main__":
-    prefix = "static/wav/Telugu/"
-
     fnames, texts = process_data(text_path, prefix)
     add_to_db(fnames, texts)
