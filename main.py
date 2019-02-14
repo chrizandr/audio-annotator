@@ -63,11 +63,12 @@ def get_next_file():
             "alwaysShowTags": "True",
             "instructions": [
                 "Highlight &amp; Label the files with sentences.",
-                "2. &nbsp; Click the play button and listen to the recording.",
-                "3. &nbsp; For each sentence that you hear click and drag on the visualization to create a new annotation.",
-                "4. &nbsp; When creating a new annotation be as precise as possible.",
-                "5. &nbsp; Select the appropriate sentence for the selected portion of the audio",
-                "6. &nbsp; Click Submit when all the sentences are marked."
+                "1. &nbsp; Click the play button and listen to the recording.",
+                "2. &nbsp; For each phrase that you hear click and drag on the visualization to create a new annotation.",
+                "3. &nbsp; When creating a new annotation be as precise as possible.",
+                "4. &nbsp; Select the appropriate sentence for the selected portion of the audio",
+                "5. &nbsp; You can listen to a selected portion by pressing the play button on top of the portion and make adjustments accordingly.",
+                "6. &nbsp; Click Submit when all the phrases are marked. Annotation will not submit if all phrases are not marked."
             ]
         }
     }
