@@ -86,7 +86,7 @@ def get_next_file():
     response["task"]["taskid"] = not_annotated.id_
     response["task"]["url"] = audio_path
     response["task"]["annotationTag"] = annotatation_tags
-    # pdb.set_trace()
+    pdb.set_trace()
     return True, response
 
 

@@ -1,12 +1,14 @@
 """Add new data to database."""
 import contextlib
 import os
+import string
 import wave
 
 from models import get_debug_session, Audio, Sentences
 from settings import DB_URL, text_path, prefix
 
 import pdb
+
 
 def process_data(filename, prefix):
     """Process the data before adding to db."""
@@ -34,7 +36,9 @@ def add_to_db(fnames, texts):
     for fname, text in zip(fnames, texts):
         print("Processing ", (100.0 * count)/total, "%")
 
-        t = text.split()
+        t = text.translate(str.maketrans('', '', string.punctuation))
+        t = t.split()
+        t = [x for x in t if len(x.strip()) > 0]
         num_words = len(t)
         sentences = []
         with contextlib.closing(wave.open(fname, 'r')) as f:
@@ -48,7 +52,7 @@ def add_to_db(fnames, texts):
                     start = int(i * part_len)
                     end = int((i+1) * part_len)
                     sentences.append(" ".join(t[start: end]))
-
+                sentences = [x for x in sentences if len(x.strip()) > 0]
                 count += 1
                 add_in_db(fname, sentences, session)
         print("Processes files: ", count)
