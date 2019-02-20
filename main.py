@@ -42,13 +42,13 @@ def admin():
         else:
             abort(404)
     if request.method == "POST":
-        pdb.set_trace()
-        form = request.form()
+        # pdb.set_trace()
+        form = request.form
         ret = False
         if "skip" in form:
             if "taskid" in form:
                 skip_file(int(form["taskid"]))
-                ret = True
+                return redirect(url_for("index"))
         else:
             ret = process_annotation(request.get_json())
 
