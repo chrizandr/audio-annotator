@@ -94,6 +94,6 @@ def setup(DB_URL):
 
 
 if __name__ == "__main__":
-    session = setup(DB_URL)
-    # session = get_debug_session(DB_URL)
-    # pdb.set_trace()
+    # session = setup(DB_URL)
+    session = get_debug_session(DB_URL)
+    pdb.set_trace()

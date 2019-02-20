@@ -47,11 +47,14 @@ def add_to_db(fnames, texts):
             duration = frames / float(rate)
             if duration > mean_len:
                 num_parts = int(duration // mean_len) + 1
-                part_len = num_words // (num_parts - 1)
+                part_len = num_words // num_parts
                 for i in range(num_parts):
                     start = int(i * part_len)
                     end = int((i+1) * part_len)
-                    sentences.append(" ".join(t[start: end]))
+                    if i == num_parts - 1:
+                        sentences.append(" ".join(t[start::]))
+                    else:
+                        sentences.append(" ".join(t[start: end]))
                 sentences = [x for x in sentences if len(x.strip()) > 0]
                 count += 1
                 add_in_db(fname, sentences, session)
