@@ -53,7 +53,13 @@
         <div class="play_bar"></div>
         <div class="hidden_img"></div>
         <div class="creation_stage_container"></div>
-        <div class="submit_container"></div>
+        <div class="submit_container"></div><br>
+        <div class="submit_container_skip ">
+          <form action="/api/" method="post">
+              <input type="hidden" value="skip" name="skip"/>
+              <input class="btn submit" type="submit" value="Skip File">
+          </form>
+        </div>
         <br>
         <br>
     </div>

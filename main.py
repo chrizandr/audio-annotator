@@ -42,6 +42,8 @@ def admin():
         else:
             abort(404)
     if request.method == "POST":
+        pdb.set_trace()
+        request.form()
         ret = process_annotation(request.get_json())
         if ret:
             next_song = get_next_file()

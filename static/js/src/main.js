@@ -144,6 +144,10 @@ Annotator.prototype = {
             // set video url
             $('#tutorial-video').attr('src', tutorialVideoURL);
 
+            // add button to skip file
+            var skip_form = '<input type="hidden" name="taskid" value="' + my.currentTask.taskid + '">';
+            $('.submit_container_skip form').prepend(skip_form);
+
             // add instructions
             var instructionsContainer = $('#instructions-container');
             instructionsContainer.empty();

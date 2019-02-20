@@ -2,6 +2,7 @@
 .play_bar,
 .labels,
 .submit_container,
+.submit_container_skip,
 .annotation,
 .creation_stage_container,
 .hidden_img {
@@ -32,7 +33,7 @@
   top: 10px !important;
 }
 
-.annotation {   
+.annotation {
   margin: 0px auto;
   position: relative;
 }
@@ -186,6 +187,22 @@
 }
 
 .submit_container .btn:hover:enabled,
+.exit:hover {
+  background-color: #000040;
+}
+
+.submit_container_skip {
+  text-align: center;
+}
+
+.submit_container_skip .btn,
+.exit {
+  color: #fff !important;
+  font-weight: bold;
+  background-color: #000080;
+}
+
+.submit_container_skip .btn:hover:enabled,
 .exit:hover {
   background-color: #000040;
 }
