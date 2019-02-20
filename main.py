@@ -43,13 +43,26 @@ def admin():
             abort(404)
     if request.method == "POST":
         pdb.set_trace()
-        request.form()
-        ret = process_annotation(request.get_json())
+        form = request.form()
+        ret = False
+        if "skip" in form:
+            if "taskid" in form:
+                skip_file(int(form["taskid"]))
+                ret = True
+        else:
+            ret = process_annotation(request.get_json())
+
         if ret:
             next_song = get_next_file()
             return jsonify(next_song)
         else:
             abort(405)
+
+
+def skip_file(fileid):
+    file = db_session.query(Audio).filter(Audio.id_ == fileid).one()
+    file.annotated = "Skip"
+    db_session.commit()
 
 
 def get_next_file():
