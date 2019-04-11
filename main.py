@@ -95,7 +95,9 @@ def get_next_file():
 
     sentences = db_session.query(Sentences).filter(Sentences.audio_id == not_annotated.id_).all()
     if len(sentences) == 0:
-        return False, None
+        not_annotated.annotated = "Skip"
+        db_session.commit()
+        return get_next_file()
 
     annotatation_tags = [x.content for x in sentences]
     response["task"]["taskid"] = not_annotated.id_
