@@ -32,15 +32,18 @@ def index():
     return render_template("index.html")
 
 
+@app.route('/complete', methods=['GET'])
+def complete():
+    """Index Page."""
+    return render_template("complete.html")
+
+
 @app.route('/api/', methods=['GET', 'POST'])
 def admin():
     """Admin Index Page."""
     if request.method == "GET":
-        ret, response = get_next_file()
-        if ret:
-            return jsonify(response)
-        else:
-            abort(404)
+        response = get_next_file()
+        return jsonify(response)
     if request.method == "POST":
         # pdb.set_trace()
         form = request.form
@@ -87,13 +90,13 @@ def get_next_file():
             ]
         }
     }
-    try:
-        not_annotated = db_session.query(Audio).filter(Audio.annotated == "False").first()
-        audio_path = not_annotated.audio_file
-    except NoResultFound:
-        return False, None
+    not_annotated = db_session.query(Audio).filter(Audio.annotated == "False").first()
+    if not_annotated is None:
+        return None
 
+    audio_path = not_annotated.audio_file
     sentences = db_session.query(Sentences).filter(Sentences.audio_id == not_annotated.id_).all()
+
     if len(sentences) == 0:
         not_annotated.annotated = "Skip"
         db_session.commit()
@@ -103,7 +106,7 @@ def get_next_file():
     response["task"]["taskid"] = not_annotated.id_
     response["task"]["url"] = audio_path
     response["task"]["annotationTag"] = annotatation_tags
-    return True, response
+    return response
 
 
 def process_annotation(data):
