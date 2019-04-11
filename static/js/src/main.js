@@ -205,8 +205,13 @@ Annotator.prototype = {
         var my = this;
         $.getJSON("/api/")
         .done(function(data) {
-            my.currentTask = data.task;
-            my.update();
+            if(data == null){
+              window.location.href = "/complete";
+            }
+            else{
+              my.currentTask = data.task;
+              my.update();
+            }
         });
     },
 
