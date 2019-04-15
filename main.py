@@ -29,7 +29,10 @@ db_session = scoped_session(sessionmaker(bind=engine))
 @app.route('/', methods=['GET'])
 def index():
     """Index Page."""
-    return render_template("index.html")
+    annotated = db_session.query(Audio).filter(Audio.annotated == "True").count()
+    not_annotated = db_session.query(Audio).filter(Audio.annotated == "False").count()
+    skipped = db_session.query(Audio).filter(Audio.annotated == "Skip").count()
+    return render_template("index.html", annotated=annotated, not_annotated=not_annotated, skipped=skipped)
 
 
 @app.route('/complete', methods=['GET'])
